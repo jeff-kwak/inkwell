@@ -1,0 +1,13 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+  default:
+    cmds:
+      - task: run
+
+  run:
+    desc: Runs the project without arguments
+    cmds:
+      - dotnet run --project src/InkWell.Cli/InkWell.Cli.csproj -- {{.CLI_ARGS}}

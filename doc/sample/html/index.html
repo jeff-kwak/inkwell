@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}} | InkWell Site</title>
+    <meta name="description" content="{{desc}}">
+    <link rel="stylesheet" href="/public/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="/">InkWell</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/posts">Posts</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>{{title}}</h1>
+            <p class="subtitle">{{desc}}</p>
+        </section>
+
+        <section class="content">
+            {{{content}}}
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; {{currentYear}} InkWell Site. All rights reserved.</p>
+            <p>Generated with InkWell on {{generatedDate}}</p>
+        </div>
+    </footer>
+
+    <script src="/public/site.js"></script>
+</body>
+</html>

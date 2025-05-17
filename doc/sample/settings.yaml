@@ -1,0 +1,15 @@
+# InkWell Site MetaData
+
+inkWellVersion: '0.1'
+title: InkWell Sample Site
+description: A static site generated with InkWell
+social:
+  - name: Twitter
+    url: https://twitter.com/inkwell
+  - name: GitHub
+    url: https://github.com/inkwell
+  - name: LinkedIn
+    url: https://linkedin.com/company/inkwell
+author:
+  name: InkWell Team
+  email: inkwell@example.com

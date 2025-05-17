@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}} | InkWell Blog</title>
+    <meta name="description" content="{{desc}}">
+    <link rel="stylesheet" href="/public/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/posts">All Posts</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <article>
+            <header>
+                <h1 class="post-title">{{title}}</h1>
+                <div class="post-meta">
+                    <time class="post-date" datetime="{{date}}">{{date_formatted}}</time>
+                    {{#if tags}}
+                    <div class="post-tags">
+                        {{#each tags}}
+                        <span class="tag">{{this}}</span>
+                        {{/each}}
+                    </div>
+                    {{/if}}
+                </div>
+            </header>
+
+            <div class="post-content">
+                {{{content}}}
+            </div>
+        </article>
+    </main>
+
+    <footer>
+        <p>&copy; {{current_year}} InkWell. Built with InkWell static site generator.</p>
+    </footer>
+
+    <script src="/public/site.js"></script>
+</body>
+</html>
