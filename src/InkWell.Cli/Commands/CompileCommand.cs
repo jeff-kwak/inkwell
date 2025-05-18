@@ -2,6 +2,7 @@ using InkWell.Cli.Tools;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using System.ComponentModel;
+using InkWell.Cli.Boilerplate;
 
 namespace InkWell.Cli.Commands
 {
@@ -31,10 +32,40 @@ namespace InkWell.Cli.Commands
                 return 1;
             }
 
+            // Create the destination directory if it doesn't exist
+            EnsureOutputDirectory(outputPath);
+
+            // Remove the contents of the output directory
+            CleanOutputDirectory(outputPath);
+
+            // Copy the public directory to the output directory
+            string publicPath = Path.Combine(sourcePath, "html/public");
+            directory.CopyDirectory(publicPath, Path.Combine(outputPath, "public"), true);
+
+            AnsiConsole.MarkupLine($"[bold green]Copying[/] public directory [blue]{publicPath}[/] to [blue]{outputPath}[/]");
+
             // Process the front matter
             AnsiConsole.MarkupLine("[bold green]Compilation complete![/]");
 
             return 0;
+        }
+
+        private void CleanOutputDirectory(string outputPath)
+        {
+            AnsiConsole.MarkupLine($"[bold green]Cleaning[/] output directory [blue]{outputPath}[/]");
+            var files = directory.GetFiles(outputPath, "*", SearchOption.AllDirectories);
+            files.ForEach(file => directory.DeleteFile(file));
+            var directories = directory.GetDirectories(outputPath, "*", SearchOption.AllDirectories);
+            directories.ForEach(dir => directory.DeleteDirectory(dir));
+        }
+
+        private void EnsureOutputDirectory(string outputPath)
+        {
+            AnsiConsole.MarkupLine($"[bold green]Ensuring[/] output directory [blue]{outputPath}[/] exists");
+            if (!directory.Exists(outputPath))
+            {
+                directory.CreateDirectory(outputPath);
+            }
         }
 
         private bool IsInkWellSourceDirectory(string path)

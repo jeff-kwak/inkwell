@@ -6,6 +6,7 @@ using InkWell.Cli.Boilerplate;
 
 var services = new ServiceCollection();
 services.AddSingleton<IDirectoryTool, DirectoryTool>();
+services.AddSingleton<IFileTool, FileTool>();
 
 var app = new CommandApp(new Registrar(services));
 

@@ -101,6 +101,55 @@ public class CompileCommandTests
     }
 
     [Test]
+    public void Execute_WithNonExistentOutputPath_CreatesOutputDirectory()
+    {
+        var directory = Substitute.For<IDirectoryTool>();
+        directory.Exists(Arg.Is("source/path")).Returns(true);
+        directory.Exists(Arg.Is("source/path/content")).Returns(true);
+        directory.Exists(Arg.Is("source/path/html")).Returns(true);
+        directory.Exists(Arg.Is("output/path")).Returns(false);
+        var remaining = Substitute.For<IRemainingArguments>();
+        var context = new CommandContext([], remaining, "test", null);
+        var command = new CompileCommand(directory);
+
+        int result = command.Execute(context, new CompileCommand.Settings
+        {
+            SourcePath = "source/path",
+            OutputPath = "output/path"
+        });
+
+        Assert.That(result, Is.EqualTo(0), "Expected command to return success code 0");
+        directory.Received(1).CreateDirectory("output/path");
+    }
+
+    [Test]
+    public void Execute_WithExistingOutputPath_CleansOutputDirectory()
+    {
+        var directory = Substitute.For<IDirectoryTool>();
+        directory.Exists(Arg.Is("source/path")).Returns(true);
+        directory.Exists(Arg.Is("source/path/content")).Returns(true);
+        directory.Exists(Arg.Is("source/path/html")).Returns(true);
+        directory.Exists(Arg.Is("output/path")).Returns(true);
+        directory.GetFiles(Arg.Is("output/path"), "*", SearchOption.AllDirectories).Returns(["file1", "file2"]);
+        directory.GetDirectories(Arg.Is("output/path"), "*", SearchOption.AllDirectories).Returns(["dir1", "dir2"]);
+        var remaining = Substitute.For<IRemainingArguments>();
+        var context = new CommandContext([], remaining, "test", null);
+        var command = new CompileCommand(directory);
+
+        int result = command.Execute(context, new CompileCommand.Settings
+        {
+            SourcePath = "source/path",
+            OutputPath = "output/path"
+        });
+
+        Assert.That(result, Is.EqualTo(0), "Expected command to return success code 0");
+        directory.Received(1).DeleteDirectory("dir1");
+        directory.Received(1).DeleteDirectory("dir2");
+        directory.Received(1).DeleteFile("file1");
+        directory.Received(1).DeleteFile("file2");
+    }
+
+    [Test]
     public void Execute_WithValidDirectoryStructure_ReturnsSuccess()
     {
         var directory = Substitute.For<IDirectoryTool>();
