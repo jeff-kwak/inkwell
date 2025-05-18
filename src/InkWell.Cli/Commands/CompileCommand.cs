@@ -1,11 +1,11 @@
+using InkWell.Cli.Tools;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 
 namespace InkWell.Cli.Commands
 {
-    public class CompileCommand : Command<CompileCommand.Settings>
+    public class CompileCommand(IDirectoryTool directory) : Command<CompileCommand.Settings>
     {
         public class Settings : CommandSettings
         {
@@ -22,19 +22,46 @@ namespace InkWell.Cli.Commands
         {
             var sourcePath = settings.SourcePath;
             var outputPath = settings.OutputPath;
+
+            // Verify that the source path exists and looks like an InkWell directory
             AnsiConsole.MarkupLine($"[bold green]Compiling[/] content from [blue]{sourcePath}[/] to [blue]{outputPath}[/]");
 
+            if (!IsInkWellSourceDirectory(sourcePath))
+            {
+                return 1;
+            }
 
-            // TODO: Implement the actual compilation logic here
-            // This would involve:
-            // 1. Reading content files from contentPath
-            // 2. Processing (e.g., converting markdown to HTML)
-            // 3. Applying templates
-            // 4. Writing output to outputPath
-
+            // Process the front matter
             AnsiConsole.MarkupLine("[bold green]Compilation complete![/]");
 
             return 0;
+        }
+
+        private bool IsInkWellSourceDirectory(string path)
+        {
+            if (!directory.Exists(path))
+            {
+                AnsiConsole.MarkupLine($"[bold red]Error:[/] Source path [blue]{path}[/] does not exist. Nothing to compile.");
+                return false;
+            }
+
+            // Verify that content and html directories exist
+            string contentPath = Path.Combine(path, "content");
+            string htmlPath = Path.Combine(path, "html");
+
+            if (!directory.Exists(contentPath))
+            {
+                AnsiConsole.MarkupLine($"[bold red]Error:[/] InkWell source directories need to have a directory called 'content'. Content directory [blue]{contentPath}[/] not found in source path.");
+                return false;
+            }
+
+            if (!directory.Exists(htmlPath))
+            {
+                AnsiConsole.MarkupLine($"[bold red]Error:[/] InkWell source directories need to have a directory called 'html' directory [blue]{htmlPath}[/] not found in source path.");
+                return false;
+            }
+
+            return true;
         }
     }
 }

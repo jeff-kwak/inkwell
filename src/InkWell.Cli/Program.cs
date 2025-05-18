@@ -1,7 +1,13 @@
 ﻿using Spectre.Console.Cli;
 using InkWell.Cli.Commands;
+using Microsoft.Extensions.DependencyInjection;
+using InkWell.Cli.Tools;
+using InkWell.Cli.Boilerplate;
 
-var app = new CommandApp();
+var services = new ServiceCollection();
+services.AddSingleton<IDirectoryTool, DirectoryTool>();
+
+var app = new CommandApp(new Registrar(services));
 
 app.Configure(config =>
 {
