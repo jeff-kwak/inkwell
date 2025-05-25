@@ -1,5 +1,5 @@
-using Spectre.Console.Cli;
 using Microsoft.Extensions.DependencyInjection;
+using Spectre.Console.Cli;
 
 namespace InkWell.Cli.Boilerplate;
 
@@ -9,7 +9,10 @@ public sealed class Resolver(IServiceProvider provider) : ITypeResolver, IDispos
 
     public object? Resolve(Type? type)
     {
-        if (type is null) return null;
+        if (type is null)
+        {
+            return null;
+        }
 
         return _provider.GetRequiredService(type);
     }

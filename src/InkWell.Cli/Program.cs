@@ -1,8 +1,8 @@
-﻿using Spectre.Console.Cli;
-using InkWell.Cli.Commands;
-using Microsoft.Extensions.DependencyInjection;
-using InkWell.Cli.Tools;
 using InkWell.Cli.Boilerplate;
+using InkWell.Cli.Commands;
+using InkWell.Cli.Tools;
+using Microsoft.Extensions.DependencyInjection;
+using Spectre.Console.Cli;
 
 var services = new ServiceCollection();
 services.AddSingleton<IDirectoryTool, DirectoryTool>();

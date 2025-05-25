@@ -25,14 +25,17 @@ public class CompileCommandTests
         console?.Dispose();
     }
 
+
     [Test]
     public void Execute_WithNonExistentSourcePath_ReturnsError()
     {
         var directory = Substitute.For<IDirectoryTool>();
+        var file = Substitute.For<IFileTool>();
+        file.Exists(Arg.Any<string>()).Returns(true);
         directory.Exists(Arg.Any<string>()).Returns(false);
         var remaining = Substitute.For<IRemainingArguments>();
         var context = new CommandContext([], remaining, "test", null);
-        var command = new CompileCommand(directory);
+        var command = new CompileCommand(directory, file);
 
         int result = command.Execute(context, new CompileCommand.Settings
         {
@@ -53,11 +56,13 @@ public class CompileCommandTests
     public void Execute_WithMissingContentDirectory_ReturnsError()
     {
         var directory = Substitute.For<IDirectoryTool>();
+        var file = Substitute.For<IFileTool>();
+        file.Exists(Arg.Any<string>()).Returns(true);
         directory.Exists(Arg.Is("source/path")).Returns(true);
         directory.Exists(Arg.Is("source/path/content")).Returns(false);
         var remaining = Substitute.For<IRemainingArguments>();
         var context = new CommandContext([], remaining, "test", null);
-        var command = new CompileCommand(directory);
+        var command = new CompileCommand(directory, file);
 
         int result = command.Execute(context, new CompileCommand.Settings
         {
@@ -78,12 +83,14 @@ public class CompileCommandTests
     public void Execute_WithMissingHtmlDirectory_ReturnsError()
     {
         var directory = Substitute.For<IDirectoryTool>();
+        var file = Substitute.For<IFileTool>();
+        file.Exists(Arg.Any<string>()).Returns(true);
         directory.Exists(Arg.Is("source/path")).Returns(true);
         directory.Exists(Arg.Is("source/path/content")).Returns(true);
         directory.Exists(Arg.Is("source/path/html")).Returns(false);
         var remaining = Substitute.For<IRemainingArguments>();
         var context = new CommandContext([], remaining, "test", null);
-        var command = new CompileCommand(directory);
+        var command = new CompileCommand(directory, file);
 
         int result = command.Execute(context, new CompileCommand.Settings
         {
@@ -104,13 +111,15 @@ public class CompileCommandTests
     public void Execute_WithNonExistentOutputPath_CreatesOutputDirectory()
     {
         var directory = Substitute.For<IDirectoryTool>();
+        var file = Substitute.For<IFileTool>();
+        file.Exists(Arg.Any<string>()).Returns(true);
         directory.Exists(Arg.Is("source/path")).Returns(true);
         directory.Exists(Arg.Is("source/path/content")).Returns(true);
         directory.Exists(Arg.Is("source/path/html")).Returns(true);
         directory.Exists(Arg.Is("output/path")).Returns(false);
         var remaining = Substitute.For<IRemainingArguments>();
         var context = new CommandContext([], remaining, "test", null);
-        var command = new CompileCommand(directory);
+        var command = new CompileCommand(directory, file);
 
         int result = command.Execute(context, new CompileCommand.Settings
         {
@@ -126,6 +135,8 @@ public class CompileCommandTests
     public void Execute_WithExistingOutputPath_CleansOutputDirectory()
     {
         var directory = Substitute.For<IDirectoryTool>();
+        var file = Substitute.For<IFileTool>();
+        file.Exists(Arg.Any<string>()).Returns(true);
         directory.Exists(Arg.Is("source/path")).Returns(true);
         directory.Exists(Arg.Is("source/path/content")).Returns(true);
         directory.Exists(Arg.Is("source/path/html")).Returns(true);
@@ -134,7 +145,7 @@ public class CompileCommandTests
         directory.GetDirectories(Arg.Is("output/path"), "*", SearchOption.AllDirectories).Returns(["dir1", "dir2"]);
         var remaining = Substitute.For<IRemainingArguments>();
         var context = new CommandContext([], remaining, "test", null);
-        var command = new CompileCommand(directory);
+        var command = new CompileCommand(directory, file);
 
         int result = command.Execute(context, new CompileCommand.Settings
         {
@@ -153,12 +164,14 @@ public class CompileCommandTests
     public void Execute_WithValidDirectoryStructure_ReturnsSuccess()
     {
         var directory = Substitute.For<IDirectoryTool>();
+        var file = Substitute.For<IFileTool>();
+        file.Exists(Arg.Any<string>()).Returns(true);
         directory.Exists(Arg.Is("source/path")).Returns(true);
         directory.Exists(Arg.Is("source/path/content")).Returns(true);
         directory.Exists(Arg.Is("source/path/html")).Returns(true);
         var remaining = Substitute.For<IRemainingArguments>();
         var context = new CommandContext([], remaining, "test", null);
-        var command = new CompileCommand(directory);
+        var command = new CompileCommand(directory, file);
 
         int result = command.Execute(context, new CompileCommand.Settings
         {
@@ -172,5 +185,30 @@ public class CompileCommandTests
             Assert.That(console.Output, Contains.Substring("Compiling"), "Expected output to contain 'Compiling'");
             Assert.That(console.Output, Contains.Substring("Compilation complete"), "Expected output to contain 'Compilation complete'");
         });
+    }
+
+    [Test]
+    public void Execute_WhenFileDoesNotExist_ReturnsError()
+    {
+        var directory = Substitute.For<IDirectoryTool>();
+        var file = Substitute.For<IFileTool>();
+        file.Exists(Arg.Any<string>()).Returns(false);
+        directory.Exists(Arg.Any<string>()).Returns(true);
+        var remaining = Substitute.For<IRemainingArguments>();
+        var context = new CommandContext([], remaining, "test", null);
+        var command = new CompileCommand(directory, file);
+
+        int result = command.Execute(context, new CompileCommand.Settings
+        {
+            SourcePath = "source/path",
+            OutputPath = "output/path"
+        });
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.EqualTo(1), "Expected command to return error code 1");
+            Assert.That(console.Output, Contains.Substring("InkWell source directories need to have an index.md file"));
+        });
+
     }
 }

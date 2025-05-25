@@ -1,5 +1,5 @@
-using Spectre.Console.Cli;
 using Microsoft.Extensions.DependencyInjection;
+using Spectre.Console.Cli;
 
 namespace InkWell.Cli.Boilerplate;
 

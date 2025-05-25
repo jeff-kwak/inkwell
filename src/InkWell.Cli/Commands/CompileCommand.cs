@@ -1,12 +1,12 @@
+using System.ComponentModel;
+using InkWell.Cli.Boilerplate;
 using InkWell.Cli.Tools;
 using Spectre.Console;
 using Spectre.Console.Cli;
-using System.ComponentModel;
-using InkWell.Cli.Boilerplate;
 
 namespace InkWell.Cli.Commands
 {
-    public class CompileCommand(IDirectoryTool directory) : Command<CompileCommand.Settings>
+    public class CompileCommand(IDirectoryTool directory, IFileTool file) : Command<CompileCommand.Settings>
     {
         public class Settings : CommandSettings
         {
@@ -39,14 +39,17 @@ namespace InkWell.Cli.Commands
             CleanOutputDirectory(outputPath);
 
             // Copy the public directory to the output directory
+            AnsiConsole.MarkupLine($"[bold green]Copying[/] public directory [blue]{publicPath}[/] to [blue]{outputPath}[/]");
             string publicPath = Path.Combine(sourcePath, "html/public");
             directory.CopyDirectory(publicPath, Path.Combine(outputPath, "public"), true);
 
-            AnsiConsole.MarkupLine($"[bold green]Copying[/] public directory [blue]{publicPath}[/] to [blue]{outputPath}[/]");
 
-            // Process the front matter
+            // Extract front-matter data and render HTML for mustache templates
+            var (data, mustache) = ProcessMarkdown(sourcePath);
+
+
+
             AnsiConsole.MarkupLine("[bold green]Compilation complete![/]");
-
             return 0;
         }
 
@@ -73,6 +76,13 @@ namespace InkWell.Cli.Commands
             if (!directory.Exists(path))
             {
                 AnsiConsole.MarkupLine($"[bold red]Error:[/] Source path [blue]{path}[/] does not exist. Nothing to compile.");
+                return false;
+            }
+
+            // Verify that the index.md file exists
+            if (!file.Exists(Path.Combine(path, "index.md")))
+            {
+                AnsiConsole.MarkupLine($"[bold red]Error:[/] InkWell source directories need to have an index.md file. Use the index.md file to hold site-level metadata in the front matter. [blue]{Path.Combine(path, "index.md")}[/] not found in source path.");
                 return false;
             }
 

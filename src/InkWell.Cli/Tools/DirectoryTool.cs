@@ -21,7 +21,9 @@ public class DirectoryTool(IFileTool fileTool) : IDirectoryTool
     public void CopyDirectory(string sourceDir, string destDir, bool recursive = true)
     {
         if (!Directory.Exists(sourceDir))
+        {
             throw new DirectoryNotFoundException($"Source directory not found: {sourceDir}");
+        }
 
         Directory.CreateDirectory(destDir);
 
