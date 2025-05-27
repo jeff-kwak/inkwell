@@ -1,7 +1,5 @@
-using Spectre.Console;
 using Spectre.Console.Cli;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 
 namespace InkWell.Cli.Commands
 {
@@ -22,17 +20,18 @@ namespace InkWell.Cli.Commands
         {
             var sourcePath = settings.SourcePath;
             var outputPath = settings.OutputPath;
-            AnsiConsole.MarkupLine($"[bold green]Compiling[/] content from [blue]{sourcePath}[/] to [blue]{outputPath}[/]");
 
+            // TODO: Validate the source path
 
-            // TODO: Implement the actual compilation logic here
-            // This would involve:
-            // 1. Reading content files from contentPath
-            // 2. Processing (e.g., converting markdown to HTML)
-            // 3. Applying templates
-            // 4. Writing output to outputPath
-
-            AnsiConsole.MarkupLine("[bold green]Compilation complete![/]");
+            // 1. Load the HTML templates
+            //  Every top-level directory is a  "family". The top most
+            //    directory is "root". The data for the whole site is available
+            //    to all templates under the "root" settings.
+            // 2. For each markdown file:
+            //    - Parse the markdown file for YAML and add to context.
+            //    - Convert the markdown to HTML
+            //    - Render the HTML using the template for the family
+            // 3. Copy the static HTML files (favicon and public/)
 
             return 0;
         }

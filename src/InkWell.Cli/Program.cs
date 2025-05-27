@@ -1,6 +1,8 @@
 ﻿using Spectre.Console.Cli;
 using InkWell.Cli.Commands;
 
+// TODO: Add dependency injection
+// https://darthpedro.net/2021/01/18/lesson-1-5-setting-up-dependency-injection-components/
 var app = new CommandApp();
 
 app.Configure(config =>
