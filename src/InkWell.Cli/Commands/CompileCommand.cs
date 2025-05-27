@@ -1,11 +1,12 @@
+using InkWell.Cli.Tools;
 using Spectre.Console.Cli;
 using System.ComponentModel;
 
 namespace InkWell.Cli.Commands
 {
-    public class CompileCommand : Command<CompileCommand.Settings>
+    public class CompileCommand(IFileTool file) : AsyncCommand<CompileCommand.Settings>
     {
-        public class Settings : CommandSettings
+        public class Settings() : CommandSettings
         {
             [Description("The source containing an InkWell content and html directory")]
             [CommandArgument(0, "<sourcePath>")]
@@ -16,10 +17,10 @@ namespace InkWell.Cli.Commands
             public required string OutputPath { get; set; }
         }
 
-        public override int Execute(CommandContext context, Settings settings)
+        public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
         {
-            var sourcePath = settings.SourcePath;
-            var outputPath = settings.OutputPath;
+            var source = settings.SourcePath;
+            var output = settings.OutputPath;
 
             // TODO: Validate the source path
 
@@ -32,6 +33,12 @@ namespace InkWell.Cli.Commands
             //    - Convert the markdown to HTML
             //    - Render the HTML using the template for the family
             // 3. Copy the static HTML files (favicon and public/)
+
+            Dictionary<string, string> templates = [];
+            templates["root"] = await file.ReadAllTextAsync(source, "index.html");
+            // Get the others in the "templates" directory
+
+
 
             return 0;
         }
