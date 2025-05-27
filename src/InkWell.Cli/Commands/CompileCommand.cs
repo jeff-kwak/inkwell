@@ -1,12 +1,21 @@
 using System.ComponentModel;
 using InkWell.Cli.Boilerplate;
 using InkWell.Cli.Tools;
+using Markdig;
+using Markdig.Extensions.Yaml;
+using Markdig.Syntax;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace InkWell.Cli.Commands
 {
-    public class CompileCommand(IDirectoryTool directory, IFileTool file) : Command<CompileCommand.Settings>
+    public class CompileCommand(
+        IDirectoryTool directory,
+        IFileTool file,
+        IMarkdownTool markdown,
+        IYamlTool yaml,
+        IMustacheTool mustache)
+        : Command<CompileCommand.Settings>
     {
         public class Settings : CommandSettings
         {
@@ -39,18 +48,67 @@ namespace InkWell.Cli.Commands
             CleanOutputDirectory(outputPath);
 
             // Copy the public directory to the output directory
-            AnsiConsole.MarkupLine($"[bold green]Copying[/] public directory [blue]{publicPath}[/] to [blue]{outputPath}[/]");
             string publicPath = Path.Combine(sourcePath, "html/public");
+            AnsiConsole.MarkupLine($"[bold green]Copying[/] public directory [blue]{publicPath}[/] to [blue]{outputPath}[/]");
             directory.CopyDirectory(publicPath, Path.Combine(outputPath, "public"), true);
 
-
-            // Extract front-matter data and render HTML for mustache templates
-            var (data, mustache) = ProcessMarkdown(sourcePath);
-
+            // First process any root markdown files.
+            var rootFiles = directory.GetFiles(sourcePath, "*.md", SearchOption.TopDirectoryOnly) .ToList();
+            foreach (var rootFile in rootFiles)
+            {
+                AnsiConsole.MarkupLine($"[bold green]Processing[/] root markdown file [blue]{rootFile}[/]");
+                var (data, mustache) = ProcessMarkdown(rootFile, "root");
+                if (data != null)
+                {
+                    // Save the processed data to the output directory
+                    var outputFilePath = Path.Combine(outputPath, "content", data.Path);
+                    directory.CreateDirectory(Path.GetDirectoryName(outputFilePath)!);
+                    file.WriteAllText(outputFilePath, mustache);
+                }
+            }
 
 
             AnsiConsole.MarkupLine("[bold green]Compilation complete![/]");
             return 0;
+        }
+
+        private (ContentData? data, string mustache) ProcessMarkdown(string sourcePath, string collection)
+        {
+            var data = new Dictionary<string, object>();
+            var mustache = string.Empty;
+
+
+            var fileContent = file.ReadAllText(sourcePath);
+            var doc = markdown.Parse(fileContent);
+            var frontMatterContent = doc.Descendants<YamlFrontMatterBlock>().FirstOrDefault();
+
+            if (frontMatterContent == null)
+            {
+                AnsiConsole.MarkupLine($"[bold yellow]Error:[/] No front matter found in [blue]{sourcePath}[/]. Skipping file.");
+                return (null, string.Empty);
+            }
+
+            var frontMatter = yaml.Deserialize(frontMatterContent);
+            return (
+                new ContentData(
+                    Collection: collection,
+                    Path: sourcePath,
+                    Title: frontMatter["title"]?.ToString() ?? string.Empty,
+                    Description: frontMatter["description"]?.ToString() ?? string.Empty,
+                    Author: new Author(
+                        Name: frontMatter["author"] is Dictionary<string, object> authorDict2 ? authorDict2["name"]?.ToString() ?? string.Empty : string.Empty,
+                        Email: frontMatter["author"] is Dictionary<string, object> authorDict ? authorDict["email"]?.ToString() : null
+                    ),
+                    CreatedAt: DateTime.Parse(frontMatter["createdAt"]?.ToString() ?? DateTime.MinValue.ToString()),
+                    UpdatedAt: DateTime.Parse(frontMatter["updatedAt"]?.ToString() ?? DateTime.MinValue.ToString()),
+                    PublishedAt: DateTime.Parse(frontMatter["publishedAt"]?.ToString() ?? DateTime.MinValue.ToString()),
+                    IsDraft: bool.Parse(frontMatter["isDraft"]?.ToString() ??  "false"),
+                    Tags: frontMatter["tags"] != null
+                        ? [.. frontMatter["tags"]!.ToString()!.Split(',').Select(tag => tag.Trim())]
+                        : []
+                ),
+                doc.ToHtml()
+            );
         }
 
         private void CleanOutputDirectory(string outputPath)

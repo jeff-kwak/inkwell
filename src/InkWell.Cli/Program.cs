@@ -7,6 +7,8 @@ using Spectre.Console.Cli;
 var services = new ServiceCollection();
 services.AddSingleton<IDirectoryTool, DirectoryTool>();
 services.AddSingleton<IFileTool, FileTool>();
+services.AddSingleton<IMarkdownTool, MarkdownTool>();
+services.AddSingleton<IYamlTool, YamlTool>();
 
 var app = new CommandApp(new Registrar(services));
 
