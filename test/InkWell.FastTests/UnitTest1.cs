@@ -1,4 +1,4 @@
-﻿namespace InkWell.FastTests;
+namespace InkWell.FastTests;
 
 public class Tests
 {

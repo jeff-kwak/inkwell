@@ -1,9 +1,15 @@
-﻿using Spectre.Console.Cli;
 using InkWell.Cli.Commands;
+using InkWell.Cli.Infrastructure;
+using InkWell.Cli.Tools;
+using Microsoft.Extensions.DependencyInjection;
+using Spectre.Console.Cli;
 
-// TODO: Add dependency injection
-// https://darthpedro.net/2021/01/18/lesson-1-5-setting-up-dependency-injection-components/
-var app = new CommandApp();
+var services = new ServiceCollection();
+services.AddSingleton<IDirectoryTool, DirectoryTool>();
+services.AddSingleton<IFileTool, FileTool>();
+
+var registrar = new TypeRegistrar(services);
+var app = new CommandApp(registrar);
 
 app.Configure(config =>
 {
