@@ -1,11 +1,10 @@
 using System.ComponentModel;
-using InkWell.Cli.Tools;
+using InkWell.Cli.Core;
 using Spectre.Console.Cli;
-using static System.Console;
 
 namespace InkWell.Cli.Commands
 {
-    public class CompileCommand(IFileTool file, IDirectoryTool directory) : AsyncCommand<CompileCommand.Settings>
+    public class CompileCommand(ITemplateLoader template) : AsyncCommand<CompileCommand.Settings>
     {
         public class Settings() : CommandSettings
         {
@@ -33,27 +32,13 @@ namespace InkWell.Cli.Commands
             //  Every top-level directory is a  "family". The top most
             //    directory is "root". The data for the whole site is available
             //    to all templates under the "root" settings.
-            // 2. For each markdown file:
+            // 3. For each markdown file:
             //    - Parse the markdown file for YAML and add to context.
             //    - Convert the markdown to HTML
-            //    - Render the HTML using the template for the family
-            // 3. Copy the static HTML files (favicon and public/)
+            // 4. Render the HTML using the templates
+            // 5. Copy the static HTML files (favicon and public/)
 
-            var htmlDir = source.Path("html");
-
-            Dictionary<string, string> templates = [];
-            templates["root"] = await file.ReadAllTextAsync(htmlDir, "index.html");
-
-            var templateDir = htmlDir.Path("templates");
-
-            var htmlTemplates = directory.GetFiles(templateDir, "*.html");
-
-            foreach (var template in htmlTemplates)
-            {
-                var family = Path.GetFileNameWithoutExtension(template).ToLowerInvariant();
-                WriteLine($"Loading template: {family}");
-                templates[family] = await file.ReadAllTextAsync(template);
-            }
+            var templates = await template.LoadTemplates(source);
 
             return 0;
         }
