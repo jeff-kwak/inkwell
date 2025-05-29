@@ -1,10 +1,11 @@
 using System.ComponentModel;
 using InkWell.Cli.Core;
+using InkWell.Cli.Tools;
 using Spectre.Console.Cli;
 
 namespace InkWell.Cli.Commands
 {
-    public class CompileCommand(ITemplateLoader template) : AsyncCommand<CompileCommand.Settings>
+    public class CompileCommand(ITemplateLoader template, IContentInfo site) : AsyncCommand<CompileCommand.Settings>
     {
         public class Settings() : CommandSettings
         {
@@ -27,7 +28,9 @@ namespace InkWell.Cli.Commands
             // 1. Load the HTML templates
             //    - The templates are in the html/templates directory.
             //    - The templates are named after the family they belong to.
-            //    - The root template is named "index.html" and is used for the root family.
+            //    - The root template is named "index.html" and is used for the
+            //      root family.
+            // 2. Build a site map from the content directory.
             // 2. Load the content files
             //  Every top-level directory is a  "family". The top most
             //    directory is "root". The data for the whole site is available
@@ -39,6 +42,10 @@ namespace InkWell.Cli.Commands
             // 5. Copy the static HTML files (favicon and public/)
 
             var templates = await template.LoadTemplates(source);
+            var contents = await site.GetAllMarkdownPaths(source);
+
+
+            contents.Each(c => Console.WriteLine($"Content: {c}"));
 
             return 0;
         }

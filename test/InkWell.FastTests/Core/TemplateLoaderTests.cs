@@ -150,7 +150,6 @@ public class TemplateLoaderTests
 
     }
 
-
     [Test]
     public async Task LoadTemplates_WhenFileToolThrows_PropagatesException()
     {
@@ -169,7 +168,6 @@ public class TemplateLoaderTests
     [Test]
     public async Task LoadTemplates_WhenDirectoryToolThrows_PropagatesException()
     {
-        // Arrange
         const string sourcePath = "/test/source";
         var expectedException = new DirectoryNotFoundException("Templates directory not found");
 
@@ -189,7 +187,6 @@ public class TemplateLoaderTests
     [Test]
     public async Task LoadTemplates_WithTemplateReadFailure_PropagatesException()
     {
-        // Arrange
         const string sourcePath = "/test/source";
         var templateFiles = new[] { "/test/template.html" };
         var expectedException = new UnauthorizedAccessException("Access denied");
