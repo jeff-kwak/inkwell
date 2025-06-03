@@ -97,9 +97,28 @@ csharp_space_between_square_brackets = false
 csharp_preserve_single_line_statements = false
 csharp_preserve_single_line_blocks = true
 
+# Parameter and argument wrapping
+csharp_wrap_parameters_style = chop_if_long
+csharp_wrap_arguments_style = chop_if_long
+csharp_wrap_chained_method_calls = chop_if_long
+csharp_wrap_before_declaration_lpar = false
+csharp_wrap_after_declaration_lpar = true
+csharp_wrap_before_invocation_lpar = false
+csharp_wrap_after_invocation_lpar = true
+csharp_wrap_before_comma = false
+csharp_wrap_after_comma = true
+
+# Line wrapping
+csharp_max_line_length = 120
+csharp_wrap_lines = true
+csharp_wrap_long_lines = true
+
 # Code style rules
 dotnet_sort_system_directives_first = true
 dotnet_separate_import_directive_groups = false
+
+# Using directive preferences
+dotnet_remove_unnecessary_usings = true:suggestion
 
 # this. preferences
 dotnet_style_qualification_for_field = false:suggestion

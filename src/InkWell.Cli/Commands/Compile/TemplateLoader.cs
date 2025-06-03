@@ -1,6 +1,6 @@
 using InkWell.Cli.Tools;
 
-namespace InkWell.Cli.Core;
+namespace InkWell.Cli.Commands.Compile;
 
 public interface ITemplateLoader
 {

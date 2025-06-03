@@ -1,9 +1,9 @@
-using InkWell.Cli.Core;
+using InkWell.Cli.Commands.Compile;
 using InkWell.Cli.Tools;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 
-namespace InkWell.FastTests.Core;
+namespace InkWell.FastTests.Commands.Compile;
 
 public class TemplateLoaderTests
 {

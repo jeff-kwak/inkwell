@@ -1,5 +1,4 @@
-using InkWell.Cli.Commands;
-using InkWell.Cli.Core;
+using InkWell.Cli.Commands.Compile;
 using InkWell.Cli.Infrastructure;
 using InkWell.Cli.Tools;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,7 +8,6 @@ var services = new ServiceCollection();
 services.AddSingleton<IDirectoryTool, DirectoryTool>();
 services.AddSingleton<IFileTool, FileTool>();
 services.AddSingleton<ITemplateLoader, TemplateLoader>();
-services.AddSingleton<IContentInfo, SiteInfo>();
 
 var registrar = new TypeRegistrar(services);
 var app = new CommandApp(registrar);
