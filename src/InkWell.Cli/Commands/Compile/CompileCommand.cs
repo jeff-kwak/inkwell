@@ -3,7 +3,7 @@ using Spectre.Console.Cli;
 
 namespace InkWell.Cli.Commands.Compile
 {
-    public class CompileCommand(ITemplateLoader template) : AsyncCommand<CompileCommand.Settings>
+    public class CompileCommand(ITemplateLoader template/*, IContentProcessor content*/) : AsyncCommand<CompileCommand.Settings>
     {
         public class Settings() : CommandSettings
         {
@@ -29,17 +29,15 @@ namespace InkWell.Cli.Commands.Compile
             //    - The root template is named "index.html" and is used for the
             //      root family.
             // 2. Load the content files
-            //  Every top-level directory is a  "family". The top most
-            //    directory is "root". The data for the whole site is available
-            //    to all templates under the "root" settings.
-            // 3. For each markdown file:
-            //    - Parse the markdown file for YAML and add to context.
-            //    - Convert the markdown to HTML
+            //  - Every top-level directory is a  "family".
+            //  - The top most directory is "root". The data for the whole
+            //    site is available to all templates under the "root" settings.
             // 4. Render the HTML using the templates
             // 5. Copy the static HTML files (favicon.ico, all other files
             //    except index.html, and public/)
 
             var templates = await template.LoadTemplates(source);
+            // var content = await content.Process(source);
 
             return 0;
         }

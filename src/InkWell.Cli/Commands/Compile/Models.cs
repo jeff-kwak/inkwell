@@ -1,7 +1,12 @@
 namespace InkWell.Cli.Commands.Compile;
 
+public record ContentInfo(string Title)
+{
+    public ContentInfo() : this(string.Empty) { } // for YamlDotNet
+}
+
 public record MarkdownContent(
-    string Id,
-    string Title,
-    string Content
+    ContentInfo Info,
+    string Family,
+    string Html
 );

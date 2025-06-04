@@ -11,7 +11,7 @@ public class TemplateLoaderTests
     private IFileTool file;
 
     [SetUp]
-    public void SetUp()
+    public void BeforeEach()
     {
         directory = Substitute.For<IDirectoryTool>();
         file = Substitute.For<IFileTool>();
