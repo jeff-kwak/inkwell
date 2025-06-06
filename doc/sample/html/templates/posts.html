@@ -24,13 +24,13 @@
                 <h1 class="post-title">{{title}}</h1>
                 <div class="post-meta">
                     <time class="post-date" datetime="{{date}}">{{date_formatted}}</time>
-                    {{#if tags}}
+                    {{#tags}}
                     <div class="post-tags">
-                        {{#each tags}}
-                        <span class="tag">{{this}}</span>
-                        {{/each}}
+                        {{#tags}}
+                        <span class="tag">{{.}}</span>
+                        {{/tags}}
                     </div>
-                    {{/if}}
+                    {{/tags}}
                 </div>
             </header>
 
@@ -41,7 +41,7 @@
     </main>
 
     <footer>
-        <p>&copy; {{current_year}} InkWell. Built with InkWell static site generator.</p>
+        <p>&copy; {{currentYear}} InkWell. Built with InkWell static site generator.</p>
     </footer>
 
     <script src="/public/site.js"></script>

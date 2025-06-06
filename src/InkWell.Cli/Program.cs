@@ -8,6 +8,7 @@ var services = new ServiceCollection();
 services.AddSingleton<IDirectoryTool, DirectoryTool>();
 services.AddSingleton<IFileTool, FileTool>();
 services.AddSingleton<ITemplateLoader, TemplateLoader>();
+services.AddSingleton<IContentProcessor, ContentProcessor>();
 
 var registrar = new TypeRegistrar(services);
 var app = new CommandApp(registrar);

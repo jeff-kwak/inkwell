@@ -1,6 +1,6 @@
 ---
 title: Hello, InkWell
-desc: A post that introduces InkWell
+description: A post that introduces InkWell
 updated: 1747417583388
 created: 1706491547504
 published: 1747417583388

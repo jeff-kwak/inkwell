@@ -57,6 +57,11 @@ end_of_line = lf
 # C# files
 [*.cs]
 
+# Using directives
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = false
+csharp_using_directive_placement = outside_namespace
+
 # New line preferences
 csharp_new_line_before_open_brace = all
 csharp_new_line_before_else = true
@@ -108,10 +113,27 @@ csharp_wrap_after_invocation_lpar = true
 csharp_wrap_before_comma = false
 csharp_wrap_after_comma = true
 
+# Constructor and record parameter wrapping
+csharp_place_constructor_initializer_on_same_line = false
+csharp_place_type_constraints_on_same_line = false
+csharp_wrap_multiple_type_parameter_constraints_style = chop_always
+csharp_wrap_object_and_collection_initializer_style = chop_if_long
+csharp_place_simple_initializer_on_single_line = false
+csharp_wrap_before_extends_colon = false
+csharp_wrap_extends_list_style = chop_if_long
+
 # Line wrapping
 csharp_max_line_length = 120
 csharp_wrap_lines = true
 csharp_wrap_long_lines = true
+csharp_wrap_before_ternary_opsigns = true
+csharp_wrap_ternary_expr_style = chop_if_long
+
+# Additional formatting options
+csharp_new_line_before_open_brace = all
+csharp_new_line_before_else = true
+csharp_new_line_before_catch = true
+csharp_new_line_before_finally = true
 
 # Code style rules
 dotnet_sort_system_directives_first = true
@@ -218,3 +240,7 @@ dotnet_naming_style.prefixed_with_i.required_prefix = I
 dotnet_naming_style.prefixed_with_i.required_suffix =
 dotnet_naming_style.prefixed_with_i.word_separator =
 dotnet_naming_style.prefixed_with_i.capitalization = pascal_case
+
+# Diagnostic rules for unused usings
+dotnet_diagnostic.IDE0005.severity = warning  # Remove unnecessary using directives
+dotnet_diagnostic.CS8019.severity = warning   # Unnecessary using directive

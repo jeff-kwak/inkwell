@@ -1,6 +1,3 @@
-using System;
-using System.IO;
-
 namespace InkWell.Cli.Tools;
 
 public interface IDirectoryTool
@@ -33,5 +30,9 @@ public class DirectoryTool : IDirectoryTool
     {
         return Directory.GetFiles(path, searchPattern, searchOption);
     }
-}
 
+    public string GetDirectoryName(string path)
+    {
+        return Path.GetDirectoryName(path) ?? string.Empty;
+    }
+}

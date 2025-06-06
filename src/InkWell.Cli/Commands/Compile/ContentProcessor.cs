@@ -1,4 +1,3 @@
-using System;
 using InkWell.Cli.Tools;
 using Markdig;
 using Markdig.Extensions.Yaml;
@@ -26,8 +25,8 @@ public class ContentProcessor(IDirectoryTool directory, IFileTool file) : IConte
         // Create a YAML deserializer with camel case naming convention.
         new DeserializerBuilder()
             .WithNamingConvention(CamelCaseNamingConvention.Instance)
+            .IgnoreUnmatchedProperties()
             .Build();
-
 
     public async IAsyncEnumerable<MarkdownContent> Process(string sourcePath)
     {
@@ -57,7 +56,7 @@ public class ContentProcessor(IDirectoryTool directory, IFileTool file) : IConte
                 }
 
                 // Convert the frontMatter into a content info object.
-                var contentInfo = yaml.Deserialize<ContentInfo>(frontMatter.Lines.ToString());
+                var contentInfo = yaml.Deserialize<FrontMatter>(frontMatter.Lines.ToString());
 
                 // Process the raw markdown content into HTML.
                 var html = Markdown.ToHtml(content, markdownPipeline);
