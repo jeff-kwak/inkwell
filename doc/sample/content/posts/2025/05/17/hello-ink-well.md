@@ -1,13 +1,12 @@
 ---
 title: Hello, InkWell
 description: A post that introduces InkWell
-updated: 1747417583388
-created: 1706491547504
-published: 1747417583388
+updated: 2025-06-07
+created: 2025-06-07
+published: 2025-06-07
 isDraft: false
 summary: >
-    The summary will not be rendered (by convention) in the final
-    markdown. The summary could be human or AI generated and used
+    The summary could be human or AI generated and used
     for several purposes, including text in thumbnails.
 ---
 # Hello, InkWell!
@@ -24,15 +23,37 @@ the Mustache templates.
 
 ## Directory Structure
 Directories in the `content/` directory are meant to contain a _family_ of
-similar content (e.g., _Posts_). _InkWell_ will look for an HTML template in the
+similar content (e.g., _posts_). _InkWell_ will look for an HTML template in the
 `html/templates/ ` directory that matches the name of the _family_. For example
 markdown files in the `content/posts/` directory will match to an HTML template
 located in `html/templates/posts.html`. That template will be used to render all
 the content pages in that directory.
 
 ## Front-Matter
-The `settings` and front matter are processed first and available to all
-templates as key-value pairs.
+Markdown files are processed and their data is available to template when
+rendering. Extra tags are ignored. Dates and Date times are parsed as ISO8601
+dates and times.
+
+| Key              | Expected Type |
+| ---------------- | ------------- |
+| Title (required) | String        |
+| Desc             | String        |
+| Updated          | Date          |
+| Created          | Date          |
+| Published        | Date          |
+| Summary          | String        |
+| Author           | AuthorInfo    |
+
+The Author has two properties. Everything is optional.
+
+```csharp
+public record AuthorInfo(string Name, string Email);
+
+```
+
+The `index.md` file has some special settings that are available to all pages
+when rendering. The front-matter in that file can be thought of as the site's
+settings.
 
 ## HTML Templates
 All HTML templates are [Mustache](https://mustache.github.io/mustache.5.html)
@@ -45,9 +66,9 @@ When publishing for the web, images should be resized and optimized to make the
 site perform well. Image processing is part of the pipeline.
 
 ## Commands
-- **compile** The act of processing an InkWell source directory (as shown in the sample),
-to an output directory is called "compiling". You issue the command `inkwell
-compile path/to/source path/to/output`.
+- **compile** The act of processing an InkWell source directory (as shown in the
+sample), to an output directory is called "compiling". You issue the command
+`inkwell compile path/to/source path/to/output`.
 
 
 ## Key Libraries Used
