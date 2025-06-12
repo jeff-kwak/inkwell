@@ -1,0 +1,109 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "format",
+            "type": "shell",
+            "command": "dotnet",
+            "args": [
+                "format"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": [],
+            "detail": "Format C# code using dotnet format"
+        },
+        {
+            "label": "remove-unused-usings",
+            "type": "shell",
+            "command": "dotnet",
+            "args": [
+                "format",
+                "--include",
+                "CS8019,IDE0005"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": [],
+            "detail": "Remove unused using directives"
+        },
+        {
+            "label": "format-verify",
+            "type": "shell",
+            "command": "dotnet",
+            "args": [
+                "format",
+                "--verify-no-changes"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": [],
+            "detail": "Verify that C# code formatting is correct"
+        },
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "dotnet",
+            "args": [
+                "build"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": "$msCompile",
+            "detail": "Build the solution"
+        },
+        {
+            "label": "test",
+            "type": "shell",
+            "command": "dotnet",
+            "args": [
+                "test"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": "$msCompile",
+            "detail": "Run all tests"
+        }
+    ]
+}

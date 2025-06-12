@@ -70,6 +70,24 @@ site perform well. Image processing is part of the pipeline.
 sample), to an output directory is called "compiling". You issue the command
 `inkwell compile path/to/source path/to/output`.
 
+## Data Available to HTML Templates
+Case is ignored.
+
+```csharp
+public record TemplateData(
+    string Title,
+    string? Desc,
+    string? Updated,
+    string? Created,
+    string? Published,
+    string? Summary,
+    AuthorInfo? Author,
+    string Html)
+```
+
+The dates have the following properties available to them:
+`Year`, `Month`, `Day`, `Hour`, `Minute`
+
 
 ## Key Libraries Used
 - **[Spectre Console](https://spectreconsole.net/)** Used to render the TUI and

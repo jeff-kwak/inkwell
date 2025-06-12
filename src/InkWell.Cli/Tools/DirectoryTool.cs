@@ -11,6 +11,10 @@ public interface IDirectoryTool
         string path,
         string searchPattern = "*",
         SearchOption searchOption = SearchOption.TopDirectoryOnly);
+
+    void EnsureDirectory(string path);
+
+    void CleanDirectory(string path);
 }
 
 public class DirectoryTool : IDirectoryTool
@@ -34,5 +38,23 @@ public class DirectoryTool : IDirectoryTool
     public string GetDirectoryName(string path)
     {
         return Path.GetDirectoryName(path) ?? string.Empty;
+    }
+
+    public void EnsureDirectory(string path)
+    {
+        var directory = Path.GetDirectoryName(path);
+        if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+        {
+            Directory.CreateDirectory(directory);
+        }
+    }
+
+    public void CleanDirectory(string path)
+    {
+        if (Directory.Exists(path))
+        {
+            Directory.Delete(path, true);
+        }
+        Directory.CreateDirectory(path);
     }
 }

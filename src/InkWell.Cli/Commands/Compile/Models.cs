@@ -6,7 +6,6 @@ public record FrontMatter(
     string? Updated,
     string? Created,
     string? Published,
-    bool? IsDraft,
     string? Summary,
     AuthorInfo? Author)
 {
@@ -16,7 +15,6 @@ public record FrontMatter(
         Updated: null,
         Created: null,
         Published: null,
-        IsDraft: true,
         Summary: null,
         Author: null)
     { } // for YamlDotNet
@@ -35,3 +33,28 @@ public record MarkdownContent(
     string Family,
     string Html
 );
+
+public record TemplateData(
+    string Title,
+    string? Desc,
+    string? Updated,
+    string? Created,
+    string? Published,
+    string? Summary,
+    AuthorInfo? Author,
+    string Html)
+{
+    public static TemplateData FromMarkdownContent(MarkdownContent content)
+    {
+        return new TemplateData(
+            Title: content.Info.Title,
+            Desc: content.Info.Desc,
+            Updated: content.Info.Updated,
+            Created: content.Info.Created,
+            Published: content.Info.Published,
+            Summary: content.Info.Summary,
+            Author: content.Info.Author,
+            Html: content.Html
+        );
+    }
+}
