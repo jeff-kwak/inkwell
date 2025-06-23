@@ -18,150 +18,191 @@ public class TemplateRendererTests
         Html: "<p>Test HTML content</p>"
     );
 
-    [Test]
-    public async Task RenderTemplate_TitleShouldBeReplaced()
+    public class RenderTemplate
     {
-        var template = "{{Title}}";
-        var renderer = new TemplateRenderer();
+        [Test]
+        public async Task RenderTemplate_TitleShouldBeReplaced()
+        {
+            var template = "{{Title}}";
+            var renderer = new TemplateRenderer();
 
-        var result = await renderer.RenderAsync(template, Data);
+            var result = await renderer.RenderAsync(template, Data);
 
-        Assert.That(result, Is.EqualTo("Test Title"));
+            Assert.That(result, Is.EqualTo("Test Title"));
+        }
+
+        [Test]
+        public async Task RenderTemplate_CaseInsensitiveTitleShouldBeReplaced()
+        {
+            var template = "{{title}}"; // lowercase
+            var renderer = new TemplateRenderer();
+
+            var result = await renderer.RenderAsync(template, Data);
+
+            Assert.That(result, Is.EqualTo("Test Title"));
+        }
+
+        [Test]
+        public async Task RenderTemplate_DescShouldBeReplaced()
+        {
+            var template = "{{desc}}";
+            var renderer = new TemplateRenderer();
+
+            var result = await renderer.RenderAsync(template, Data);
+
+            Assert.That(result, Is.EqualTo("Test Description"));
+        }
+
+        [Test]
+        public async Task RenderTemplate_NullDescriptionShouldBeEmpty()
+        {
+            var template = "{{DESC}}";
+            var missingDescription = Data with { Info = Data.Info with { Desc = null } };
+            var renderer = new TemplateRenderer();
+
+            var result = await renderer.RenderAsync(template, missingDescription);
+
+            Assert.That(result, Is.EqualTo(""));
+        }
+
+        [Test]
+        public async Task RenderTemplate_UpdatedDateShouldBeRenderedAsISO8601()
+        {
+            var template = "{{Updated}}";
+            var renderer = new TemplateRenderer();
+
+            var result = await renderer.RenderAsync(template, Data);
+
+            Assert.That(result, Is.EqualTo("2025-06-22T09:31:00"));
+        }
+
+        [Test]
+        public async Task RenderTemplate_UpdatedDateWithNullShouldBeEmpty()
+        {
+            var template = "{{updated}}";
+            var missingUpdated = Data with { Info = Data.Info with { Updated = null } };
+            var renderer = new TemplateRenderer();
+
+            var result = await renderer.RenderAsync(template, missingUpdated);
+
+            Assert.That(result, Is.EqualTo(string.Empty));
+        }
+
+        [Test]
+        public async Task RenderTemplate_PublishedDateShouldBeRenderedAsISO8601()
+        {
+            var template = "{{Published}}";
+            var renderer = new TemplateRenderer();
+
+            var result = await renderer.RenderAsync(template, Data);
+
+            Assert.That(result, Is.EqualTo("2025-06-22T09:30:00"));
+        }
+
+        [Test]
+        public async Task RenderTemplate_PublishedDateWithNullShouldBeEmpty()
+        {
+            var template = "{{published}}";
+            var missingPublished = Data with { Info = Data.Info with { Published = null } };
+            var renderer = new TemplateRenderer();
+
+            var result = await renderer.RenderAsync(template, missingPublished);
+
+            Assert.That(result, Is.EqualTo(string.Empty));
+        }
+
+        [Test]
+        public async Task RenderTemplate_CreatedDateShouldBeRenderedAsISO8601()
+        {
+            var template = "{{Created}}";
+            var renderer = new TemplateRenderer();
+
+            var result = await renderer.RenderAsync(template, Data);
+
+            Assert.That(result, Is.EqualTo("2025-06-22T09:30:00"));
+        }
+
+        [Test]
+        public async Task RenderTemplate_CreatedDateWithNullShouldBeEmpty()
+        {
+            var template = "{{created}}";
+            var missingCreated = Data with { Info = Data.Info with { Created = null } };
+            var renderer = new TemplateRenderer();
+
+            var result = await renderer.RenderAsync(template, missingCreated);
+
+            Assert.That(result, Is.EqualTo(string.Empty));
+        }
+
+        [Test]
+        public async Task RenderTemplate_SummaryShouldBeReplaced()
+        {
+            var template = "{{Summary}}";
+            var renderer = new TemplateRenderer();
+
+            var result = await renderer.RenderAsync(template, Data);
+
+            Assert.That(result, Is.EqualTo("Test Summary"));
+        }
+
+        [Test]
+        public async Task RenderTemplate_AuthorNameShouldBeReplaced()
+        {
+            var template = "{{Author.Name}}";
+            var renderer = new TemplateRenderer();
+
+            var result = await renderer.RenderAsync(template, Data);
+
+            Assert.That(result, Is.EqualTo("John Doe"));
+        }
+
+        [Test]
+        public async Task RenderTemplate_AuthorEmailShouldBeReplaced()
+        {
+            var template = "{{Author.Email}}";
+            var renderer = new TemplateRenderer();
+
+            var result = await renderer.RenderAsync(template, Data);
+
+            Assert.That(result, Is.EqualTo("john.doe@example.com"));
+        }
     }
 
-    [Test]
-    public async Task RenderTemplate_CaseInsensitiveTitleShouldBeReplaced()
+    public class DateHelpers
     {
-        var template = "{{title}}"; // lowercase
-        var renderer = new TemplateRenderer();
+        [Test]
+        public async Task Year_ShouldReturnYear()
+        {
+            var template = "{{Year Created}}";
+            var renderer = new TemplateRenderer();
 
-        var result = await renderer.RenderAsync(template, Data);
+            var result = await renderer.RenderAsync(template, Data);
 
-        Assert.That(result, Is.EqualTo("Test Title"));
-    }
+            Assert.That(result, Is.EqualTo(Data.Info.Created?.Year.ToString()));
+        }
 
-    [Test]
-    public async Task RenderTemplate_DescShouldBeReplaced()
-    {
-        var template = "{{desc}}";
-        var renderer = new TemplateRenderer();
+        [Test]
+        public async Task Year_WithNullDate_ShouldReturnEmpty()
+        {
+            var template = "{{Year Updated}}";
+            var missingUpdated = Data with { Info = Data.Info with { Updated = null } };
+            var renderer = new TemplateRenderer();
 
-        var result = await renderer.RenderAsync(template, Data);
+            var result = await renderer.RenderAsync(template, missingUpdated);
 
-        Assert.That(result, Is.EqualTo("Test Description"));
-    }
+            Assert.That(result, Is.EqualTo(string.Empty));
+        }
 
-    [Test]
-    public async Task RenderTemplate_NullDescriptionShouldBeEmpty()
-    {
-        var template = "{{DESC}}";
-        var missingDescription = Data with { Info = Data.Info with { Desc = null } };
-        var renderer = new TemplateRenderer();
+        [Test]
+        public async Task Format_ShouldRespectFormatAndCulture()
+        {
+            // var template = "{{Date 'yyyy-MM-dd' 'en-US' Created}}";
+            var template = "{{Date 'dd MMMM yyyy à HH:mm' 'fr-FR' Created}}"; // Default culture is en-US
+            var renderer = new TemplateRenderer();
 
-        var result = await renderer.RenderAsync(template, missingDescription);
+            var result = await renderer.RenderAsync(template, Data);
 
-        Assert.That(result, Is.EqualTo(""));
-    }
-
-    [Test]
-    public async Task RenderTemplate_UpdatedDateShouldBeRenderedAsISO8601()
-    {
-        var template = "{{Updated}}";
-        var renderer = new TemplateRenderer();
-
-        var result = await renderer.RenderAsync(template, Data);
-
-        Assert.That(result, Is.EqualTo("2025-06-22T09:31:00"));
-    }
-
-    [Test]
-    public async Task RenderTemplate_UpdatedDateWithNullShouldBeEmpty()
-    {
-        var template = "{{updated}}";
-        var missingUpdated = Data with { Info = Data.Info with { Updated = null } };
-        var renderer = new TemplateRenderer();
-
-        var result = await renderer.RenderAsync(template, missingUpdated);
-
-        Assert.That(result, Is.EqualTo(string.Empty));
-    }
-
-    [Test]
-    public async Task RenderTemplate_PublishedDateShouldBeRenderedAsISO8601()
-    {
-        var template = "{{Published}}";
-        var renderer = new TemplateRenderer();
-
-        var result = await renderer.RenderAsync(template, Data);
-
-        Assert.That(result, Is.EqualTo("2025-06-22T09:30:00"));
-    }
-
-    [Test]
-    public async Task RenderTemplate_PublishedDateWithNullShouldBeEmpty()
-    {
-        var template = "{{published}}";
-        var missingPublished = Data with { Info = Data.Info with { Published = null } };
-        var renderer = new TemplateRenderer();
-
-        var result = await renderer.RenderAsync(template, missingPublished);
-
-        Assert.That(result, Is.EqualTo(string.Empty));
-    }
-
-    [Test]
-    public async Task RenderTemplate_CreatedDateShouldBeRenderedAsISO8601()
-    {
-        var template = "{{Created}}";
-        var renderer = new TemplateRenderer();
-
-        var result = await renderer.RenderAsync(template, Data);
-
-        Assert.That(result, Is.EqualTo("2025-06-22T09:30:00"));
-    }
-
-    [Test]
-    public async Task RenderTemplate_CreatedDateWithNullShouldBeEmpty()
-    {
-        var template = "{{created}}";
-        var missingCreated = Data with { Info = Data.Info with { Created = null } };
-        var renderer = new TemplateRenderer();
-
-        var result = await renderer.RenderAsync(template, missingCreated);
-
-        Assert.That(result, Is.EqualTo(string.Empty));
-    }
-
-    [Test]
-    public async Task RenderTemplate_SummaryShouldBeReplaced()
-    {
-        var template = "{{Summary}}";
-        var renderer = new TemplateRenderer();
-
-        var result = await renderer.RenderAsync(template, Data);
-
-        Assert.That(result, Is.EqualTo("Test Summary"));
-    }
-
-    [Test]
-    public async Task RenderTemplate_AuthorNameShouldBeReplaced()
-    {
-        var template = "{{Author.Name}}";
-        var renderer = new TemplateRenderer();
-
-        var result = await renderer.RenderAsync(template, Data);
-
-        Assert.That(result, Is.EqualTo("John Doe"));
-    }
-
-    [Test]
-    public async Task RenderTemplate_AuthorEmailShouldBeReplaced()
-    {
-        var template = "{{Author.Email}}";
-        var renderer = new TemplateRenderer();
-
-        var result = await renderer.RenderAsync(template, Data);
-
-        Assert.That(result, Is.EqualTo("john.doe@example.com"));
+            Assert.That(result, Is.EqualTo("2025-06-22"));
+        }
     }
 }

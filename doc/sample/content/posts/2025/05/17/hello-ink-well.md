@@ -86,7 +86,10 @@ public record TemplateData(
 ```
 
 The dates have the following helpers available to them:
-`Year`, `Month`, `Day`, `Hour`, `Minute`
+`Year`, `Format`
+
+- `Year` will extract the year component from the date
+- `Format` lets you pass any date time format as an argument
 
 ```html
 <p>This is the year {{Year Created}}
