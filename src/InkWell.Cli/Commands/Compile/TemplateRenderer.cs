@@ -1,5 +1,6 @@
 using Stubble.Core;
 using Stubble.Core.Builders;
+using Stubble.Helpers;
 
 namespace InkWell.Cli.Commands.Compile;
 
@@ -10,8 +11,19 @@ public interface ITemplateRenderer
 
 public class TemplateRenderer : ITemplateRenderer
 {
+    private static readonly Helpers helpers =
+        new Helpers()
+        .Register("Year", (HelperContext ctx, DateTime date) => date.Year.ToString("####"));
+
     private static readonly StubbleVisitorRenderer render =
-        new StubbleBuilder().Build();
+        new StubbleBuilder()
+        .Configure(cfg =>
+        {
+            cfg.AddHelpers(helpers);
+            cfg.SetIgnoreCaseOnKeyLookup(true);
+        })
+        .Build();
+
 
     public async Task<string> RenderAsync(string template, MarkdownContent content)
     {

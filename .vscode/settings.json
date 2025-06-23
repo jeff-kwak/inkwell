@@ -1,27 +1,27 @@
 {
-  "cSpell.words": [
-    "Markdig"
-  ],
-  "editor.formatOnSave": true,
-  "editor.formatOnType": true,
-  "editor.formatOnPaste": true,
-  "editor.codeActionsOnSave": {
-    "source.organizeImports": "explicit",
-    "source.removeUnusedImports": "explicit",
-    "source.fixAll": "explicit"
-  },
-  "[csharp]": {
+    "cSpell.words": [
+        "Markdig"
+    ],
     "editor.formatOnSave": true,
     "editor.formatOnType": true,
     "editor.formatOnPaste": true,
-    "editor.defaultFormatter": "ms-dotnettools.csharp",
     "editor.codeActionsOnSave": {
-      "source.organizeImports": "explicit",
-      "source.removeUnusedImports": "explicit",
-      "source.fixAll": "explicit"
-    }
-  },
-  "dotnet.format.enable": true,
-  "omnisharp.enableEditorConfigSupport": true,
-  "omnisharp.enableRoslynAnalyzers": true
+        "source.organizeImports": "explicit",
+        "source.removeUnusedImports": "explicit",
+        "source.fixAll": "explicit"
+    },
+    "[csharp]": {
+        "editor.formatOnSave": true,
+        "editor.formatOnType": true,
+        "editor.formatOnPaste": true,
+        "editor.defaultFormatter": "ms-dotnettools.csharp",
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit",
+            "source.removeUnusedImports": "explicit",
+            "source.fixAll": "explicit"
+        }
+    },
+    "dotnet.format.enable": true,
+    "omnisharp.enableEditorConfigSupport": true,
+    "omnisharp.enableRoslynAnalyzers": true
 }

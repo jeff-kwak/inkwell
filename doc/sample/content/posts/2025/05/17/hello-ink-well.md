@@ -85,14 +85,20 @@ public record TemplateData(
     string Html)
 ```
 
-The dates have the following properties available to them:
+The dates have the following helpers available to them:
 `Year`, `Month`, `Day`, `Hour`, `Minute`
 
+```html
+<p>This is the year {{Year Created}}
+```
 
 ## Key Libraries Used
 - **[Spectre Console](https://spectreconsole.net/)** Used to render the TUI and
   process command-line arguments.
-- **[Stubble]()** Used to process Mustache templates.
+- **[Stubble](https://github.com/StubbleOrg/Stubble)** Used to render the HTML
+  templates and template data.
+- **[Stubble.Helpers](https://github.com/StubbleOrg/Stubble.Helpers)** Used to
+  add helper registration to Stubble
 - **[Markdig](https://github.com/xoofx/markdig)** Used to process and render
   Markdown.
 - **[YamlDotNet](https://github.com/aaubry/YamlDotNet)** Used to process YAML
