@@ -1,8 +1,8 @@
 ---
 title: A Post with Sub Resources
 description: A page that demonstrates the file structure
-updated: 1747417584499
-created: 1706491547504
+updated: 2025-06-24
+created: 2025-06-24
 isDraft: true
 ---
 

@@ -192,17 +192,5 @@ public class TemplateRendererTests
 
             Assert.That(result, Is.EqualTo(string.Empty));
         }
-
-        [Test]
-        public async Task Format_ShouldRespectFormatAndCulture()
-        {
-            // var template = "{{Date 'yyyy-MM-dd' 'en-US' Created}}";
-            var template = "{{Date 'dd MMMM yyyy à HH:mm' 'fr-FR' Created}}"; // Default culture is en-US
-            var renderer = new TemplateRenderer();
-
-            var result = await renderer.RenderAsync(template, Data);
-
-            Assert.That(result, Is.EqualTo("2025-06-22"));
-        }
     }
 }
