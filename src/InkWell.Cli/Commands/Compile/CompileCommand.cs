@@ -52,23 +52,7 @@ namespace InkWell.Cli.Commands.Compile
                 // Render the template
                 var compiled = await renderer.RenderAsync(templateContent, contentItem);
 
-                // // TODO: Don't think that genie figured this out right either but
-                // // it's close.
-                // // Generate output file path
-                // // For root content, use index.html, otherwise use family/title structure
-                // string outputFilePath;
-                // if (contentItem.Family.Equals("root", StringComparison.OrdinalIgnoreCase))
-                // {
-                //     outputFilePath = Path.Combine(output, "index.html");
-                // }
-                // else
-                // {
-                // Create a safe filename from the title
-                var safeTitle = string.Join("", contentItem.Info.Title.ToLowerInvariant()
-                    .Where(c => char.IsLetterOrDigit(c) || c == ' ' || c == '-'))
-                    .Replace(' ', '-');
-                var outputFilePath = Path.Combine(output, contentItem.Family, $"{safeTitle}.html");
-                // }
+                var outputFilePath = Path.Combine(output, contentItem.Family, $"{contentItem.Info.Title.ToSafeFileName()}.html");
 
                 // Write the rendered HTML to file
                 await file.WriteAllTextAsync(compiled, outputFilePath);
