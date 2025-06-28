@@ -175,4 +175,33 @@ public class PathExtensionsTests
 
         Assert.That(result, Is.EqualTo("folder-subfolder-filename"));
     }
+
+    [Test]
+    public void GetDirectoryName_WithValidPath_ReturnsDirectoryName()
+    {
+        var path = "/home/user/documents/file.txt";
+        var result = path.GetDirectoryName();
+
+        Assert.That(result, Is.EqualTo("/home/user/documents"));
+    }
+
+    [Test]
+    public void RemovePathBefore_WithFamilyInPath_ReturnsPathAfterFamily()
+    {
+        var path = "/home/user/documents/inkwell/content/item.md";
+        var family = "inkwell";
+        var result = path.RemovePathBefore(family);
+
+        Assert.That(result, Is.EqualTo("content/item.md"));
+    }
+
+    [Test]
+    public void RemovePathBefore_WithFamilyNotInPath_ReturnsOriginalPath()
+    {
+        var path = "/home/user/documents/inkwell/content/item.md";
+        var family = "unknown";
+        var result = path.RemovePathBefore(family); // Family not found in path
+
+        Assert.That(result, Is.EqualTo(path)); // Should return the original path
+    }
 }

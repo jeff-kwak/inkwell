@@ -20,4 +20,19 @@ public static partial class PathExtensions
 
     [GeneratedRegex(@"-+")]
     private static partial Regex MultipleDashes();
+
+    public static string GetDirectoryName(this string path)
+    {
+        return System.IO.Path.GetDirectoryName(path) ?? string.Empty;
+    }
+
+    public static string RemovePathBefore(this string path, string family)
+    {
+        var pathStart = path.IndexOf(family, StringComparison.OrdinalIgnoreCase);
+        if (pathStart < 0)
+        {
+            return path; // If family not found, return original path
+        }
+        return path.Substring(pathStart + family.Length).TrimStart(System.IO.Path.DirectorySeparatorChar);
+    }
 }
