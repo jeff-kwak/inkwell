@@ -14,6 +14,7 @@ public class TemplateRendererTests
             Summary: "Test Summary",
             Author: new AuthorInfo("John Doe", "john.doe@example.com")
         ),
+        Path: "test/path/to/content.md",
         Family: "Test Family",
         Html: "<p>Test HTML content</p>"
     );

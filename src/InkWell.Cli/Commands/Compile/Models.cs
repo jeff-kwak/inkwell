@@ -30,6 +30,7 @@ public record AuthorInfo(string Name, string Email)
 
 public record MarkdownContent(
     FrontMatter Info,
+    string Path,
     string Family,
     string Html
 );

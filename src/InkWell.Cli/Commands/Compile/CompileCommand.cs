@@ -52,7 +52,17 @@ namespace InkWell.Cli.Commands.Compile
                 // Render the template
                 var compiled = await renderer.RenderAsync(templateContent, contentItem);
 
-                var outputFilePath = Path.Combine(output, contentItem.Family, $"{contentItem.Info.Title.ToSafeFileName()}.html");
+                // So the content path contains the source path.
+                // Remove the source path from the content item path, and then
+                // use the rest of the path to create the output file path.
+                // var outputFilePath = Path.Combine(output, contentItem.Family,
+                // $"{contentItem.Info.Title.ToSafeFileName()}.html");
+                var path = Path.GetDirectoryName(contentItem.Path) ?? string.Empty;
+                var outputStart = path.IndexOf(contentItem.Family);
+                var outputFilePath = Path.Combine(
+                    output,
+                    outputStart >= 0 ? path.Substring(outputStart) : string.Empty,
+                    $"{contentItem.Info.Title.ToSafeFileName()}.html");
 
                 // Write the rendered HTML to file
                 await file.WriteAllTextAsync(compiled, outputFilePath);

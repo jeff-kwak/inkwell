@@ -72,6 +72,7 @@ public class ContentProcessor(IDirectoryTool directory, IFileTool file) : IConte
                 // Create a MarkdownContent object and yield it.
                 yield return new MarkdownContent(
                     Info: contentInfo,
+                    Path: markdownPath,
                     Family: string.IsNullOrEmpty(familyName) ? "root" : familyName,
                     Html: html
                 );
