@@ -1,3 +1,4 @@
+using InkWell.Cli.Commands.Compile.Models;
 using InkWell.Cli.Tools;
 using Markdig;
 using Markdig.Extensions.Yaml;

@@ -5,9 +5,14 @@ version: "3"
 tasks:
   default:
     cmds:
-      - task: run
+      - task: test
 
   run:
     desc: Runs the InkWell CLI and allows passing arguments
     cmds:
       - dotnet run --project src/InkWell.Cli/InkWell.Cli.csproj -- {{.CLI_ARGS}}
+
+  test:
+    desc: Runs the tests for the InkWell CLI
+    cmds:
+      - dotnet build && dotnet test

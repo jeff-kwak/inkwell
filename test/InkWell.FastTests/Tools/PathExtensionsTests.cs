@@ -180,7 +180,7 @@ public class PathExtensionsTests
     public void GetDirectoryName_WithValidPath_ReturnsDirectoryName()
     {
         var path = "/home/user/documents/file.txt";
-        var result = path.GetDirectoryName();
+        var result = path.DirName();
 
         Assert.That(result, Is.EqualTo("/home/user/documents"));
     }
@@ -192,7 +192,7 @@ public class PathExtensionsTests
         var family = "inkwell";
         var result = path.RemovePathBefore(family);
 
-        Assert.That(result, Is.EqualTo("content/item.md"));
+        Assert.That(result, Is.EqualTo("inkwell/content/item.md"));
     }
 
     [Test]

@@ -5,6 +5,7 @@ desc: A simple about page
 updated: 2025-06-24
 created: 2025-06-24
 published: 2025-06-24
+fileNameMatchesTitle: false
 ---
 
 # About this Site

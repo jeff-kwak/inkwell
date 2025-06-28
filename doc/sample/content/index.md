@@ -8,4 +8,5 @@ created: 2025-05-25T12:09:33.567-04:00
 author:
     name: InkWell Team
     email: inkwell@example.com
+fileNameMatchesTitle: false
 ---

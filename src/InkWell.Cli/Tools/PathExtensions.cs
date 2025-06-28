@@ -21,7 +21,7 @@ public static partial class PathExtensions
     [GeneratedRegex(@"-+")]
     private static partial Regex MultipleDashes();
 
-    public static string GetDirectoryName(this string path)
+    public static string DirName(this string path)
     {
         return System.IO.Path.GetDirectoryName(path) ?? string.Empty;
     }
@@ -33,6 +33,12 @@ public static partial class PathExtensions
         {
             return path; // If family not found, return original path
         }
-        return path.Substring(pathStart + family.Length).TrimStart(System.IO.Path.DirectorySeparatorChar);
+        return path.Substring(pathStart).TrimStart(System.IO.Path.DirectorySeparatorChar);
+    }
+
+    public static string FileNameWithoutExtension(this string path)
+    {
+        var fileName = System.IO.Path.GetFileNameWithoutExtension(path);
+        return fileName ?? string.Empty; // Return empty if no file name
     }
 }

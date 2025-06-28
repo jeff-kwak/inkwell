@@ -1,4 +1,5 @@
 using InkWell.Cli.Commands.Compile;
+using InkWell.Cli.Commands.Compile.Models;
 
 namespace InkWell.FastTests.Commands.Compile;
 
@@ -12,6 +13,7 @@ public class TemplateRendererTests
             Created: new DateTime(2025, 06, 22, 9, 30, 0),
             Published: new DateTime(2025, 06, 22, 9, 30, 0),
             Summary: "Test Summary",
+            FileNameMatchesTitle: true,
             Author: new AuthorInfo("John Doe", "john.doe@example.com")
         ),
         Path: "test/path/to/content.md",

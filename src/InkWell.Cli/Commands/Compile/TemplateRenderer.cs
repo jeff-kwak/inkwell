@@ -1,3 +1,4 @@
+using InkWell.Cli.Commands.Compile.Models;
 using Stubble.Core;
 using Stubble.Core.Builders;
 using Stubble.Helpers;
