@@ -4,10 +4,17 @@ public interface IFileTool
 {
     Task<string> ReadAllTextAsync(params string[] paths);
     Task WriteAllTextAsync(string content, params string[] paths);
+
+    void Copy(string source, string destination);
 }
 
 public class FileTool : IFileTool
 {
+    public void Copy(string source, string destination)
+    {
+        File.Copy(source, destination, true);
+    }
+
     public async Task<string> ReadAllTextAsync(params string[] paths)
     {
         var fullPath = Path.Combine(paths);

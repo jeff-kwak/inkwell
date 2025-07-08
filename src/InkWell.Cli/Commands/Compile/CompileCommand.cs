@@ -67,6 +67,22 @@ namespace InkWell.Cli.Commands.Compile
                 await file.WriteAllTextAsync(compiled, Path.Combine(outputDir, outputFilename));
             }
 
+            // Copy the public directory
+            directory.EnsureDirectory(Path.Combine(output, "public"));
+            directory.CopyDirectory(Path.Combine(source, "html", "public"), Path.Combine(output, "public"));
+
+            // Copy all the root files except for the index.html file (as it's
+            // handled as content))
+            var sourceRoot = Path.Combine(source, "html");
+            var rootFiles = directory.GetFiles(sourceRoot, "*.*", SearchOption.TopDirectoryOnly)
+                .Where(f => !f.EndsWith("index.html", StringComparison.OrdinalIgnoreCase));
+
+            foreach (var rootFile in rootFiles)
+            {
+                var destFile = Path.Combine(output, Path.GetFileName(rootFile));
+                file.Copy(rootFile, destFile);
+            }
+
             return 0;
         }
     }

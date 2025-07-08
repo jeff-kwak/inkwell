@@ -15,6 +15,8 @@ public interface IDirectoryTool
     void EnsureDirectory(string path);
 
     void CleanDirectory(string path);
+
+    void CopyDirectory(string source, string destination);
 }
 
 public class DirectoryTool : IDirectoryTool
@@ -42,10 +44,9 @@ public class DirectoryTool : IDirectoryTool
 
     public void EnsureDirectory(string path)
     {
-        var directory = Path.GetDirectoryName(path);
-        if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+        if (!Directory.Exists(path))
         {
-            Directory.CreateDirectory(directory);
+            Directory.CreateDirectory(path);
         }
     }
 
@@ -56,5 +57,21 @@ public class DirectoryTool : IDirectoryTool
             Directory.Delete(path, true);
         }
         Directory.CreateDirectory(path);
+    }
+
+    public void CopyDirectory(string source, string destination)
+    {
+        EnsureDirectory(destination);
+        foreach (var file in Directory.GetFiles(source))
+        {
+            var destFile = Path.Combine(destination, Path.GetFileName(file));
+            File.Copy(file, destFile, true);
+
+            foreach (var dir in Directory.GetDirectories(destination))
+            {
+                var destDir = Path.Combine(destination, Path.GetFileName(dir));
+                CopyDirectory(dir, destDir);
+            }
+        }
     }
 }
