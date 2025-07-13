@@ -1,4 +1,3 @@
-- copy all supporting files like images and what not to the right places
 - add tags to posts
 - capture serialization errors from yaml (e.g.,numbers as dates)
 - support list of pages for menus and things

@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Magick.NET.Core" Version="14.6.0" />
     <PackageReference Include="Markdig" Version="0.41.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0-preview.4.25258.110" />
     <PackageReference Include="Spectre.Console" Version="0.50.0" />
