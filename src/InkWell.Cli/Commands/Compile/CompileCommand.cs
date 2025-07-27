@@ -66,8 +66,13 @@ namespace InkWell.Cli.Commands.Compile
                 // Write the rendered HTML to file
                 await file.WriteAllTextAsync(compiled, Path.Combine(outputDir, outputFilename));
 
+                // Add the outfile to the list of files
+
                 // Copy contents of posts and pages that aren't markdown files
-                var nonMarkdownFiles = directory.GetFiles(contentItem.Path.DirName()).Where(f => !f.EndsWith(".md", StringComparison.OrdinalIgnoreCase));
+                var nonMarkdownFiles =
+                    directory.GetFiles(contentItem.Path.DirName())
+                    .Where(f => !f.EndsWith(".md", StringComparison.OrdinalIgnoreCase));
+
                 foreach (var nonMarkdownFile in nonMarkdownFiles)
                 {
                     // Copy the file to the output directory
